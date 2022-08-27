@@ -116,7 +116,7 @@ func (x *xhtml) write(xhtmlFilePath string) {
 			err,
 			x.xml))
 	}
-
+	xhtmlFileContent = []byte(xmlfmt.FormatXML(string(xhtmlFileContent), "", "  ", true))
 	// Add the doctype declaration to the output
 	xhtmlFileContent = append([]byte(xhtmlDoctype), xhtmlFileContent...)
 	// Add the xml header to the output
@@ -124,7 +124,7 @@ func (x *xhtml) write(xhtmlFilePath string) {
 	// It's generally nice to have files end with a newline
 	xhtmlFileContent = append(xhtmlFileContent, "\n"...)
 
-	if err := filesystem.WriteFile(xhtmlFilePath, []byte(xmlfmt.FormatXML(string(xhtmlFileContent), "", "  ", true)), filePermissions); err != nil {
+	if err := filesystem.WriteFile(xhtmlFilePath, xhtmlFileContent, filePermissions); err != nil {
 		panic(fmt.Sprintf("Error writing XHTML file: %s", err))
 	}
 }
