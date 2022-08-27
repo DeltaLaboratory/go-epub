@@ -7,6 +7,7 @@ import (
 	"strconv"
 )
 
+//goland:noinspection HttpUrlsUsage
 const (
 	tocNavBodyTemplate = `
     <nav epub:type="toc">
@@ -23,7 +24,7 @@ const (
 	tocNcxFilename = "toc.ncx"
 	tocNcxItemID   = "ncx"
 	tocNcxTemplate = `
-<ncx xmlns="https://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
   <head>
     <meta name="dtb:uid" content="" />
     <meta name="dtb:depth" content="" />
@@ -38,7 +39,7 @@ const (
   </navMap>
 </ncx>`
 
-	xmlnsEpub = "https://www.idpf.org/2007/ops"
+	xmlnsEpub = "http://www.idpf.org/2007/ops"
 )
 
 // toc implements the EPUB table of contents
@@ -79,8 +80,9 @@ type tocNavLink struct {
 	Data    string   `xml:",chardata"`
 }
 
+//goland:noinspection ALL
 type tocNcxRoot struct {
-	XMLName xml.Name         `xml:"https://www.daisy.org/z3986/2005/ncx/ ncx"`
+	XMLName xml.Name         `xml:"http://www.daisy.org/z3986/2005/ncx/ ncx"`
 	Version string           `xml:"version,attr"`
 	Meta    tocNcxMeta       `xml:"head>meta"`
 	Title   string           `xml:"docTitle>text"`

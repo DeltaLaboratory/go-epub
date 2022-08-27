@@ -48,8 +48,10 @@ type pkg struct {
 }
 
 // This holds the actual XML for the package file
+//
+//goland:noinspection ALL
 type pkgRoot struct {
-	XMLName          xml.Name    `xml:"https://www.idpf.org/2007/opf package"`
+	XMLName          xml.Name    `xml:"http://www.idpf.org/2007/opf package"`
 	UniqueIdentifier string      `xml:"unique-identifier,attr"`
 	Version          string      `xml:"version,attr"`
 	Metadata         pkgMetadata `xml:"metadata"`
