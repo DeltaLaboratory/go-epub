@@ -21,7 +21,6 @@ Basic usage:
 	if err != nil {
 		// handle error
 	}
-
 */
 package epub
 
@@ -367,7 +366,7 @@ func (e *Epub) addSection(parentFilename string, body string, sectionTitle strin
 			var section []epubSection
 			e.sections[parentIndex].children = &section
 		}
-		(*e.sections[parentIndex].children) = append(*e.sections[parentIndex].children, s)
+		*e.sections[parentIndex].children = append(*e.sections[parentIndex].children, s)
 	} else {
 		e.sections = append(e.sections, s)
 	}
@@ -437,7 +436,7 @@ func (e *Epub) SetCover(internalImagePath string, internalCSSPath string) {
 		delete(e.css, e.cover.cssFilename)
 
 		if e.cover.cssTempFile != "" {
-			os.Remove(e.cover.cssTempFile)
+			_ = os.Remove(e.cover.cssTempFile)
 		}
 	}
 

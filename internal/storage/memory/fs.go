@@ -51,7 +51,7 @@ func (m *Memory) WriteFile(name string, data []byte, perm fs.FileMode) error {
 	f := &file{
 		name:    path.Base(name),
 		modTime: time.Now(),
-		mode:    (perm),
+		mode:    perm,
 		content: data,
 	}
 	m.fs[name] = f

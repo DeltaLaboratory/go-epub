@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -15,7 +14,7 @@ import (
 )
 
 // grabber is a top level structure that allows a custom http client.
-// if onlyChecl is true, the methods will not perform actual grab to spare memory and bandwidth
+// if onlyCheck is true, the methods will not perform actual grab to spare memory and bandwidth
 type grabber struct {
 	*http.Client
 }
@@ -139,7 +138,7 @@ func (g grabber) dataURLHandler(mediaSource string, onlyCheck bool) (io.ReadClos
 	if err != nil {
 		return nil, err
 	}
-	return ioutil.NopCloser(bytes.NewReader(data.Data)), nil
+	return io.NopCloser(bytes.NewReader(data.Data)), nil
 }
 
 type fetchError []error

@@ -15,9 +15,9 @@ type FSType int
 var filesystem storage.Storage = osfs.NewOSFS(os.TempDir())
 
 const (
-	// This defines the local filesystem
+	// OsFS This defines the local filesystem
 	OsFS FSType = iota
-	// This defines the memory filesystem
+	// MemoryFS This defines the memory filesystem
 	MemoryFS
 )
 

@@ -3,6 +3,7 @@ package epub
 import (
 	"encoding/xml"
 	"fmt"
+	"github.com/go-xmlfmt/xmlfmt"
 )
 
 const (
@@ -48,7 +49,7 @@ type xhtmlLink struct {
 }
 
 // This holds the content of the XHTML document between the <body> tags. It is
-// implemented as a string because we don't know what it will contain and we
+// implemented as a string because we don't know what it will contain, and we
 // leave it up to the user of the package to validate the content
 type xhtmlInnerxml struct {
 	XML string `xml:",innerxml"`
@@ -107,7 +108,7 @@ func (x *xhtml) Title() string {
 
 // Write the XHTML file to the specified path
 func (x *xhtml) write(xhtmlFilePath string) {
-	xhtmlFileContent, err := xml.MarshalIndent(x.xml, "", "  ")
+	xhtmlFileContent, err := xml.Marshal(x.xml)
 	if err != nil {
 		panic(fmt.Sprintf(
 			"Error marshalling XML for XHTML file: %s\n"+
@@ -123,7 +124,7 @@ func (x *xhtml) write(xhtmlFilePath string) {
 	// It's generally nice to have files end with a newline
 	xhtmlFileContent = append(xhtmlFileContent, "\n"...)
 
-	if err := filesystem.WriteFile(xhtmlFilePath, []byte(xhtmlFileContent), filePermissions); err != nil {
+	if err := filesystem.WriteFile(xhtmlFilePath, []byte(xmlfmt.FormatXML(string(xhtmlFileContent), "", "  ", true)), filePermissions); err != nil {
 		panic(fmt.Sprintf("Error writing XHTML file: %s", err))
 	}
 }

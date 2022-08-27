@@ -52,7 +52,7 @@ const (
 	xhtmlFolderName   = "xhtml"
 )
 
-// WriteTo the dest io.Writer. The return value is the number of bytes written. Any error encountered during the write is also returned.
+// WriteTo the dest io.Writer. The return value is the number of bytes written. Any error encountered during write is also returned.
 func (e *Epub) WriteTo(dst io.Writer) (int64, error) {
 	e.Lock()
 	defer e.Unlock()
@@ -344,7 +344,7 @@ func (e *Epub) writeMedia(rootEpubDir string, mediaMap map[string]string, mediaF
 		}
 
 		for mediaFilename, mediaSource := range mediaMap {
-			mediaType, err := grabber{(e.Client)}.fetchMedia(mediaSource, mediaFolderPath, mediaFilename)
+			mediaType, err := grabber{e.Client}.fetchMedia(mediaSource, mediaFolderPath, mediaFilename)
 			if err != nil {
 				return err
 			}
@@ -369,7 +369,7 @@ func fixXMLId(id string) string {
 	if len(id) == 0 {
 		panic("No id given")
 	}
-	fixedId := []rune{}
+	var fixedId []rune
 	for i := 0; len(id) > 0; i++ {
 		r, size := utf8.DecodeRuneInString(id)
 		if i == 0 {
