@@ -3,7 +3,6 @@ package epub
 import (
 	"encoding/xml"
 	"fmt"
-	"github.com/go-xmlfmt/xmlfmt"
 )
 
 const (
@@ -116,7 +115,14 @@ func (x *xhtml) write(xhtmlFilePath string) {
 			err,
 			x.xml))
 	}
-	xhtmlFileContent = []byte(xmlfmt.FormatXML(string(xhtmlFileContent), "", "  ", true))
+	xhtmlFileContent, err = xmlIndent(xhtmlFileContent)
+	if err != nil {
+		panic(fmt.Sprintf(
+			"Error indenting XML for XHTML file: %s\n"+
+				"\tXML=%#v",
+			err,
+			x.xml))
+	}
 	// Add the doctype declaration to the output
 	xhtmlFileContent = append([]byte(xhtmlDoctype), xhtmlFileContent...)
 	// Add the xml header to the output
@@ -127,4 +133,24 @@ func (x *xhtml) write(xhtmlFilePath string) {
 	if err := filesystem.WriteFile(xhtmlFilePath, xhtmlFileContent, filePermissions); err != nil {
 		panic(fmt.Sprintf("Error writing XHTML file: %s", err))
 	}
+}
+
+func xmlIndent(content []byte) ([]byte, error) {
+	nodes := xmlNode{}
+	err := xml.Unmarshal(content, &nodes)
+	if err != nil {
+		return nil, fmt.Errorf("indent: error unmarshalling XML: %s", err)
+	}
+	res, err := xml.MarshalIndent(nodes, "", "  ")
+	if err != nil {
+		return nil, fmt.Errorf("indent: error marshalling XML: %s", err)
+	}
+	return res, nil
+}
+
+type xmlNode struct {
+	Attr     []xml.Attr
+	XMLName  xml.Name
+	Children []xmlNode `xml:",any"`
+	Text     string    `xml:",chardata"`
 }
