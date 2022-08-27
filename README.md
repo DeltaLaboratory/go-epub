@@ -34,9 +34,9 @@ If EPUBCheck is installed locally, it will be run alongside the Go tests. To ins
 
 1. Make sure you have Java installed on your system
 
-1. Get the latest version of EPUBCheck from [https://github.com/w3c/epubcheck/releases](https://github.com/w3c/epubcheck/releases)
+2. Get the latest version of EPUBCheck from [https://github.com/w3c/epubcheck/releases](https://github.com/w3c/epubcheck/releases)
 
-1. Download and extract EPUBCheck in the root directory of this project, e.g.
+3. Download and extract EPUBCheck in the root directory of this project, e.g.
 
    ```
    wget https://github.com/IDPF/epubcheck/releases/download/v4.2.5/epubcheck-4.2.5.zip
@@ -47,9 +47,9 @@ If you do not wish to install EPUBCheck locally, you can manually validate the E
 
 1. Set `doCleanup = false` in epub_test.go
 
-1. Run the tests (see below)
+2. Run the tests (see below)
 
-1. Upload the generated `My EPUB.epub` file to [http://validator.idpf.org/](http://validator.idpf.org/)
+3. Upload the generated `My EPUB.epub` file to [http://validator.idpf.org/](http://validator.idpf.org/)
 
 #### Run tests
 

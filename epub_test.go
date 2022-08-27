@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"os/exec"
@@ -16,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bmaupin/go-epub/internal/storage"
+	"github.com/DeltaLaboratory/go-epub/internal/storage"
 	"github.com/gofrs/uuid"
 )
 
@@ -34,7 +33,7 @@ const (
 	testCoverCSSSource       = "testdata/cover.css"
 	testCoverContentTemplate = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="https://www.idpf.org/2007/ops">
   <head>
     <title>%s</title>
     <link rel="stylesheet" type="text/css" href="%s"></link>
@@ -71,8 +70,8 @@ const (
 	testPpdTemplate           = `page-progression-direction="%s"`
 	testMimetypeContents      = "application/epub+zip"
 	testPkgContentTemplate    = `<?xml version="1.0" encoding="UTF-8"?>
-<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="pub-id" version="3.0">
-  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+<package xmlns="https://www.idpf.org/2007/opf" unique-identifier="pub-id" version="3.0">
+  <metadata xmlns:dc="https://purl.org/dc/elements/1.1/">
     <dc:identifier id="pub-id">%s</dc:identifier>
     <dc:title>%s</dc:title>
     <dc:language>en</dc:language>
@@ -88,7 +87,7 @@ const (
 	<p>This is a paragraph.</p>`
 	testSectionContentTemplate = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="https://www.idpf.org/2007/ops">
   <head>
     <title>%s</title>
   </head>
@@ -290,7 +289,7 @@ func TestAddImage(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error response from test image URL: %s", err)
 	}
-	testImageContents, err = ioutil.ReadAll(resp.Body)
+	testImageContents, err = io.ReadAll(resp.Body)
 	if err != nil {
 		t.Errorf("Unexpected error reading test image file from URL: %s", err)
 	}
@@ -340,7 +339,7 @@ func TestAddVideo(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error response from test video URL: %s", err)
 	}
-	testVideoContents, err = ioutil.ReadAll(resp.Body)
+	testVideoContents, err = io.ReadAll(resp.Body)
 	if err != nil {
 		t.Errorf("Unexpected error reading test video file from URL: %s", err)
 	}
@@ -860,7 +859,7 @@ func cleanup(epubFilename string, tempDir string) {
 // TrimAllSpace trims all space from each line of the string and removes empty
 // lines for easier comparison
 func trimAllSpace(s string) string {
-	trimmedLines := []string{}
+	var trimmedLines []string
 	for _, line := range strings.Split(s, "\n") {
 		line = strings.TrimSpace(line)
 		if line != "" {
@@ -946,7 +945,7 @@ func validateEpub(t testing.TB, epubFilename string) ([]byte, error) {
 		t.Error("Error getting working directory")
 	}
 
-	items, err := ioutil.ReadDir(cwd)
+	items, err := os.ReadDir(cwd)
 	if err != nil {
 		t.Error("Error getting contents of working directory")
 	}
@@ -958,7 +957,7 @@ func validateEpub(t testing.TB, epubFilename string) ([]byte, error) {
 			break
 
 		} else if strings.HasPrefix(i.Name(), testEpubcheckPrefix) {
-			if i.Mode().IsDir() {
+			if i.IsDir() {
 				pathToEpubcheck = filepath.Join(i.Name(), testEpubcheckJarfile)
 				if _, err := os.Stat(pathToEpubcheck); err == nil {
 					break

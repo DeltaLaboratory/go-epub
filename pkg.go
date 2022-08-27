@@ -15,8 +15,8 @@ const (
 	pkgAuthorScheme   = "marc:relators"
 	pkgCreatorID      = "creator"
 	pkgFileTemplate   = `<?xml version="1.0" encoding="UTF-8"?>
-<package version="3.0" unique-identifier="pub-id" xmlns="http://www.idpf.org/2007/opf">
-  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+<package version="3.0" unique-identifier="pub-id" xmlns="https://www.idpf.org/2007/opf">
+  <metadata xmlns:dc="https://purl.org/dc/elements/1.1/">
     <dc:identifier id="pub-id"></dc:identifier>
     <dc:title></dc:title>
     <dc:language></dc:language>
@@ -31,7 +31,7 @@ const (
 	pkgModifiedProperty = "dcterms:modified"
 	pkgUniqueIdentifier = "pub-id"
 
-	xmlnsDc = "http://purl.org/dc/elements/1.1/"
+	xmlnsDc = "https://purl.org/dc/elements/1.1/"
 )
 
 // pkg implements the package document file (package.opf), which contains
@@ -49,7 +49,7 @@ type pkg struct {
 
 // This holds the actual XML for the package file
 type pkgRoot struct {
-	XMLName          xml.Name    `xml:"http://www.idpf.org/2007/opf package"`
+	XMLName          xml.Name    `xml:"https://www.idpf.org/2007/opf package"`
 	UniqueIdentifier string      `xml:"unique-identifier,attr"`
 	Version          string      `xml:"version,attr"`
 	Metadata         pkgMetadata `xml:"metadata"`
@@ -73,8 +73,9 @@ type pkgIdentifier struct {
 
 // <item> elements, one per each file stored in the EPUB
 // Ex: <item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav" />
-//     <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml" />
-//     <item id="section0001.xhtml" href="xhtml/section0001.xhtml" media-type="application/xhtml+xml" />
+//
+//	<item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml" />
+//	<item id="section0001.xhtml" href="xhtml/section0001.xhtml" media-type="application/xhtml+xml" />
 type pkgItem struct {
 	ID         string `xml:"id,attr"`
 	Href       string `xml:"href,attr"`
@@ -91,7 +92,8 @@ type pkgItemref struct {
 // The <meta> element, which contains modified date, role of the creator (e.g.
 // author), etc
 // Ex: <meta refines="#creator" property="role" scheme="marc:relators" id="role">aut</meta>
-//     <meta property="dcterms:modified">2011-01-01T12:00:00Z</meta>
+//
+//	<meta property="dcterms:modified">2011-01-01T12:00:00Z</meta>
 type pkgMeta struct {
 	Refines  string `xml:"refines,attr,omitempty"`
 	Property string `xml:"property,attr,omitempty"`
@@ -270,7 +272,7 @@ func (p *pkg) write(tempDir string) {
 	// It's generally nice to have files end with a newline
 	pkgFileContent = append(pkgFileContent, "\n"...)
 
-	if err := filesystem.WriteFile(pkgFilePath, []byte(pkgFileContent), filePermissions); err != nil {
+	if err := filesystem.WriteFile(pkgFilePath, pkgFileContent, filePermissions); err != nil {
 		panic(fmt.Sprintf("Error writing package file: %s", err))
 	}
 }

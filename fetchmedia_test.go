@@ -48,17 +48,17 @@ func Test_fetchMedia(t *testing.T) {
 func testFetchMedia(t *testing.T) {
 	filename := "gophercolor16x16.png"
 	mux := http.NewServeMux()
-	mux.HandleFunc("/image.png", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/image.png", func(w http.ResponseWriter, r *http.Request) {
 		data, err := os.Open(filepath.Join("testdata", filename))
 		if err != nil {
 			t.Fatal("cannot open testdata")
 		}
 		defer data.Close()
 		io.Copy(w, data)
-	}))
-	mux.HandleFunc("/test.css", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	})
+	mux.HandleFunc("/test.css", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "body{}")
-	}))
+	})
 	ts := httptest.NewServer(mux)
 	defer ts.Close()
 

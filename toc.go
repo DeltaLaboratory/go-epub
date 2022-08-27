@@ -23,7 +23,7 @@ const (
 	tocNcxFilename = "toc.ncx"
 	tocNcxItemID   = "ncx"
 	tocNcxTemplate = `
-<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+<ncx xmlns="https://www.daisy.org/z3986/2005/ncx/" version="2005-1">
   <head>
     <meta name="dtb:uid" content="" />
     <meta name="dtb:depth" content="" />
@@ -38,7 +38,7 @@ const (
   </navMap>
 </ncx>`
 
-	xmlnsEpub = "http://www.idpf.org/2007/ops"
+	xmlnsEpub = "https://www.idpf.org/2007/ops"
 )
 
 // toc implements the EPUB table of contents
@@ -80,7 +80,7 @@ type tocNavLink struct {
 }
 
 type tocNcxRoot struct {
-	XMLName xml.Name         `xml:"http://www.daisy.org/z3986/2005/ncx/ ncx"`
+	XMLName xml.Name         `xml:"https://www.daisy.org/z3986/2005/ncx/ ncx"`
 	Version string           `xml:"version,attr"`
 	Meta    tocNcxMeta       `xml:"head>meta"`
 	Title   string           `xml:"docTitle>text"`
@@ -195,7 +195,7 @@ func (t *toc) addSubSection(parent string, index int, title string, relativePath
 			Data: title,
 		},
 	}
-	if len(t.navXML.Links) > parentNavIndex  {
+	if len(t.navXML.Links) > parentNavIndex {
 		// Create a new array if none exists
 		if t.navXML.Links[parentNavIndex].Children == nil {
 			n := make([]tocNavItem, 0)
@@ -290,7 +290,7 @@ func (t *toc) writeNcxDoc(tempDir string) {
 	ncxFileContent = append(ncxFileContent, "\n"...)
 
 	ncxFilePath := filepath.Join(tempDir, contentFolderName, tocNcxFilename)
-	if err := filesystem.WriteFile(ncxFilePath, []byte(ncxFileContent), filePermissions); err != nil {
+	if err := filesystem.WriteFile(ncxFilePath, ncxFileContent, filePermissions); err != nil {
 		panic(fmt.Sprintf("Error writing EPUB v2 TOC file: %s", err))
 	}
 }

@@ -12,7 +12,7 @@ import (
 func BenchmarkAddImage_http(b *testing.B) {
 	filename := "gophercolor16x16.png"
 	mux := http.NewServeMux()
-	mux.HandleFunc("/image.png", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/image.png", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case "GET":
 			data, err := os.Open(filepath.Join("testdata", filename))
@@ -24,7 +24,7 @@ func BenchmarkAddImage_http(b *testing.B) {
 		case "HEAD":
 			w.WriteHeader(http.StatusOK)
 		}
-	}))
+	})
 	ts := httptest.NewServer(mux)
 	defer ts.Close()
 	e := NewEpub("test")
