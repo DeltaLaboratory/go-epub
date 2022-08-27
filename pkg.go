@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+//goland:noinspection HttpUrlsUsage
 const (
 	pkgAuthorID       = "role"
 	pkgAuthorData     = "aut"
@@ -15,8 +16,8 @@ const (
 	pkgAuthorScheme   = "marc:relators"
 	pkgCreatorID      = "creator"
 	pkgFileTemplate   = `<?xml version="1.0" encoding="UTF-8"?>
-<package version="3.0" unique-identifier="pub-id" xmlns="https://www.idpf.org/2007/opf">
-  <metadata xmlns:dc="https://purl.org/dc/elements/1.1/">
+<package version="3.0" unique-identifier="pub-id" xmlns="http://www.idpf.org/2007/opf">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
     <dc:identifier id="pub-id"></dc:identifier>
     <dc:title></dc:title>
     <dc:language></dc:language>
@@ -31,11 +32,11 @@ const (
 	pkgModifiedProperty = "dcterms:modified"
 	pkgUniqueIdentifier = "pub-id"
 
-	xmlnsDc = "https://purl.org/dc/elements/1.1/"
+	xmlnsDc = "http://purl.org/dc/elements/1.1/"
 )
 
 // pkg implements the package document file (package.opf), which contains
-// metadata about the EPUB (title, author, etc) as well as a list of files the
+// metadata about the EPUB (title, author, etc.) as well as a list of files the
 // EPUB contains.
 //
 // Sample: https://github.com/bmaupin/epub-samples/blob/master/minimal-v3plus2/EPUB/package.opf
